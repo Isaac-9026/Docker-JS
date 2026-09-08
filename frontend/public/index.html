@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Manager Pro</title>
+    <meta name="description" content="Sistema de gestión de inventario moderno">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos Personalizados -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-boxes-stacked logo-icon"></i>
+                <h2>InvManager</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-box-open"></i> Productos</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <h1>Resumen de Inventario</h1>
+                <button id="btn-add-product" class="btn btn-primary">
+                    <i class="fa-solid fa-plus"></i> Nuevo Producto
+                </button>
+            </header>
+
+            <!-- Summary Cards -->
+            <section class="summary-cards" id="summary-container">
+                <div class="card glass">
+                    <div class="card-icon"><i class="fa-solid fa-box"></i></div>
+                    <div class="card-info">
+                        <h3>Total Productos</h3>
+                        <p class="card-value" id="summary-total">-</p>
+                    </div>
+                </div>
+                <div class="card glass">
+                    <div class="card-icon success"><i class="fa-solid fa-check-circle"></i></div>
+                    <div class="card-info">
+                        <h3>Disponibles</h3>
+                        <p class="card-value" id="summary-disponibles">-</p>
+                    </div>
+                </div>
+                <div class="card glass">
+                    <div class="card-icon warning"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="card-info">
+                        <h3>Stock Bajo</h3>
+                        <p class="card-value" id="summary-bajo">-</p>
+                    </div>
+                </div>
+                <div class="card glass">
+                    <div class="card-icon danger"><i class="fa-solid fa-circle-xmark"></i></div>
+                    <div class="card-info">
+                        <h3>Agotados</h3>
+                        <p class="card-value" id="summary-agotados">-</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filters -->
+            <section class="filters-section glass">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-input" placeholder="Buscar producto...">
+                </div>
+                <div class="filter-group">
+                    <select id="filter-category" class="custom-select">
+                        <option value="">Todas las categorías</option>
+                    </select>
+                    <select id="filter-status" class="custom-select">
+                        <option value="">Todos los estados</option>
+                        <option value="Disponible">Disponible</option>
+                        <option value="Stock bajo">Stock Bajo</option>
+                        <option value="Agotado">Agotado</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Data Table -->
+            <section class="table-container glass">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body">
+                        <tr>
+                            <td colspan="7" class="text-center">Esperando conexión con la API...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for Add/Edit -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal glass-modal">
+            <header class="modal-header">
+                <h2 id="modal-title">Registrar Producto</h2>
+                <button class="close-btn" id="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </header>
+            <form id="product-form" class="modal-form">
+                <input type="hidden" id="product-id">
+                
+                <div class="form-group">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" required placeholder="Ej. Laptop Gaming">
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" rows="3" placeholder="Detalles adicionales..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="categoria">Categoría</label>
+                        <input type="text" id="categoria" required list="category-list" placeholder="Ej. Electrónica">
+                        <datalist id="category-list"></datalist>
+                    </div>
+                    <div class="form-group">
+                        <label for="precio">Precio ($)</label>
+                        <input type="number" id="precio" required min="0" step="0.01" placeholder="0.00">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="stock">Stock Actual</label>
+                        <input type="number" id="stock" required min="0" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="stock_minimo">Stock Mínimo</label>
+                        <input type="number" id="stock_minimo" required min="0" placeholder="0">
+                    </div>
+                </div>
+
+                <footer class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
