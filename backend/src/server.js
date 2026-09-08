@@ -10,6 +10,10 @@ app.use(cors()); // Permite peticiones desde el frontend
 app.use(express.json()); // Permite interpretar cuerpos JSON en peticiones POST/PUT
 
 const pool = require('./config/db');
+const productRoutes = require('./routes/productRoutes');
+
+// Rutas del recurso productos
+app.use('/api/products', productRoutes);
 
 // Ruta de prueba (Health check)
 app.get('/api/health', (req, res) => {
