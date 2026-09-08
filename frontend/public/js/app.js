@@ -254,6 +254,50 @@ document.addEventListener('DOMContentLoaded', () => {
         saveProduct(productData, id);
     });
 
+    // --- NAVEGACIÓN DEL MENÚ LATERAL ---
+    const navDashboard = document.getElementById('nav-dashboard');
+    const navProducts = document.getElementById('nav-products');
+    const productsSection = document.getElementById('products-section');
+    const summarySection = document.getElementById('summary-container');
+
+    if (navDashboard && navProducts) {
+        navDashboard.addEventListener('click', (e) => {
+            e.preventDefault();
+            navDashboard.classList.add('active');
+            navProducts.classList.remove('active');
+            if (summarySection) {
+                summarySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+        navProducts.addEventListener('click', (e) => {
+            e.preventDefault();
+            navProducts.classList.add('active');
+            navDashboard.classList.remove('active');
+            if (productsSection) {
+                productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            if (searchInput) {
+                setTimeout(() => searchInput.focus(), 400);
+            }
+        });
+
+        // Actualizar ítem activo automáticamente al hacer scroll
+        window.addEventListener('scroll', () => {
+            if (!productsSection) return;
+            const triggerPoint = productsSection.getBoundingClientRect().top;
+            if (triggerPoint <= 200) {
+                navProducts.classList.add('active');
+                navDashboard.classList.remove('active');
+            } else {
+                navDashboard.classList.add('active');
+                navProducts.classList.remove('active');
+            }
+        });
+    }
+
     // Iniciar carga de datos
     fetchProducts();
 });
