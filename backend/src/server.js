@@ -42,6 +42,10 @@ app.get('/api/health/db', async (req, res) => {
 });
 
 // Arrancar el servidor
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en el puerto ${PORT}`);
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Servidor corriendo en el puerto ${PORT}`);
+    });
+}
+
+module.exports = app;
