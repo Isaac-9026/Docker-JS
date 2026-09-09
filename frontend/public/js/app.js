@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:3000/api/products';
+// Utilizamos una ruta relativa. Nginx interceptará esta ruta y la enviará al backend.
+const API_URL = '/api/products';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Referencias a elementos del DOM
